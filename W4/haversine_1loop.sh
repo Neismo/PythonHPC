@@ -5,7 +5,7 @@
 #BSUB -q hpc
 
 ### -- set the job Name -- 
-#BSUB -J haversine
+#BSUB -J haversine(1loop)
 
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 1
@@ -32,10 +32,10 @@
 
 ### -- Specify the output and error file. %J is the job-id -- 
 ### -- -o and -e mean append, -oo and -eo mean overwrite -- 
-#BSUB -o haversine.out 
-#BSUB -e haversine.err 
+#BSUB -o haversine_1loop_%J.out 
+#BSUB -e haversine_1loop_%J.err 
 
 source /dtu/projects/02613_2025/conda/conda_init.sh
 conda activate 02613
 
-python -m cProfile -s cumulative -u haversine.py input.csv
+python -m cProfile -s cumulative haversine_1loop.py /dtu/projects/02613_2025/data/locations/locations_1000.csv
