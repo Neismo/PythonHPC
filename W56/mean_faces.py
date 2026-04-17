@@ -21,8 +21,7 @@ def reduce_step(args):
     arr = tonumpyarray(shared_arr).reshape((-1,) + elemshape)
     # Change the code below to compute a step of the reduction
     # ---------------------------8<---------------------------
-    stop = min(e, len(arr) - s)
-    arr[b : stop : 2*s] += arr[b+s : stop+s : 2*s]
+    arr[b:e:2*s] += arr[b+s:e+s:2*s]
 
 
 if __name__ == '__main__':
