@@ -19,6 +19,13 @@ def generate_mandelbrot_set(points, num_processes):
         escape_times = pool.map(mandelbrot_escape_time, points, chunksize=chunk_size)
     return np.array(escape_times)
 
+def generate_mandelbrot_set_chunks(points, num_processes):
+    # Fixed number of chunks, but larger than the number of processers!
+    chunk_size = 50
+    with multiprocessing.Pool(processes=num_processes) as pool:
+        escape_times = pool.map(mandelbrot_escape_time, points, chunksize=chunk_size)
+    return np.array(escape_times)
+
 def plot_mandelbrot(escape_times):
     plt.imshow(escape_times, cmap='hot', extent=(-2, 2, -2, 2))
     plt.axis('off')
