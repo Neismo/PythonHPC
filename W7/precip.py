@@ -21,7 +21,7 @@ def total_precip(df):
 
 if __name__ == "__main__":
     DATA_LOC = sys.argv[1] # "/dtu/projects/02613_2025/data/dmi/2023_01.csv.zip"
-    df = pd.read_csv(DATA_LOC, compression='zip')
+    df = pd.read_csv(DATA_LOC)
 
     # df = df.sample(frac=0.1)  # Sample 10% of the data
 
