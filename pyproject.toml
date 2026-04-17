@@ -8,5 +8,7 @@ dependencies = [
     "blosc>=1.11.4",
     "line-profiler>=5.0.2",
     "numpy>=2.4.4",
+    "pandas>=3.0.2",
     "pillow>=12.2.0",
+    "pyarrow>=23.0.1",
 ]
