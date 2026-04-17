@@ -23,11 +23,10 @@ if __name__ == "__main__":
     DATA_LOC = sys.argv[1] # "/dtu/projects/02613_2025/data/dmi/2023_01.csv.zip"
     df = pd.read_csv(DATA_LOC, compression='zip')
 
-    df = df.sample(frac=0.1)  # Sample 10% of the data
-
-    start_time = time()
+    # df = df.sample(frac=0.1)  # Sample 10% of the data
 
     precip = total_precip(df)
+    #precip_raw = total_precip_raw(df)
+    #precip_apply = total_precip_apply(df)
 
-    end_time = time()
-    print(f"{precip:.4f} in time ({end_time - start_time})")
+    print(precip)
