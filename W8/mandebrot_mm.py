@@ -40,7 +40,7 @@ if __name__ == "__main__":
     # Precompute points
     x_values = np.linspace(xmin, xmax, width)
     y_values = np.linspace(ymin, ymax, height)
-    points = np.memmap('points.dat', dtype=complex, mode='w+', shape=(width * height,))
+    points = np.memmap('points.dat', dtype=np.int32, mode='w+', shape=(width * height,))
     for i, x in enumerate(x_values):
         for j, y in enumerate(y_values):
             points[i * width + j] = complex(x, y)
