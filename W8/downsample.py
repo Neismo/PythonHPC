@@ -7,10 +7,8 @@ if __name__ == "__main__":
     N = int(sys.argv[2])
     step_length = int(sys.argv[3])
 
-    # Loading the memmap in read mode here.
     mandelbrot_set = np.memmap(mandelbrot_set_path, dtype=np.int32, mode='r', shape=(N, N))
 
-    # Take every step_length'th element in both dimensions to create the downsampled version.
     downsampled_set = mandelbrot_set[::step_length, ::step_length]
 
     # Save as PNG
