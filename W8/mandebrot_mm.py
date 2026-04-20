@@ -46,6 +46,8 @@ if __name__ == "__main__":
     mandelbrot_set = np.memmap('mandelbrot.dat', dtype=np.int32, mode='w+', shape=(N, N))
     mandelbrot_set[:] = generate_mandelbrot_set(points, num_proc).reshape((N, N)).T
 
+    mandelbrot_set.flush()
+
     # Save set as image
     # mandelbrot_set = mandelbrot_set.reshape((N, N))
     # plot_mandelbrot(mandelbrot_set)
