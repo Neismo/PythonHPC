@@ -14,4 +14,4 @@ if __name__ == "__main__":
     # Save as PNG
     plt.imshow(downsampled_set, cmap='hot', extent=(-2, 2, -2, 2))
     plt.axis('off')
-    plt.savefig('mandelbrot_downsampled.png', bbox_inches='tight', pad_inches=0)
+    plt.imsave('mandelbrot_downsampled.png', downsampled_set, cmap='hot', format='png')
