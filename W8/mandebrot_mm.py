@@ -32,20 +32,20 @@ def plot_mandelbrot(escape_times):
     plt.savefig('mandelbrot.png', bbox_inches='tight', pad_inches=0)
 
 if __name__ == "__main__":
-    width, height = int(sys.argv[1]), int(sys.argv[1]) # N x N
+    N = int(sys.argv[1])
     xmin, xmax = -2, 2
     ymin, ymax = -2, 2
     num_proc = 4
 
     # Precompute points
-    x_values = np.linspace(xmin, xmax, width)
-    y_values = np.linspace(ymin, ymax, height)
+    x_values = np.linspace(xmin, xmax, N)
+    y_values = np.linspace(ymin, ymax, N)
     points = [complex(x, y) for y in y_values for x in x_values]
 
     # Compute set
-    mandelbrot_set = np.memmap('mandelbrot.dat', dtype=np.int32, mode='w+', shape=(height, width))
-    mandelbrot_set[:] = generate_mandelbrot_set(points, num_proc).reshape((height, width))
+    mandelbrot_set = np.memmap('mandelbrot.dat', dtype=np.int32, mode='w+', shape=(N, N))
+    mandelbrot_set[:] = generate_mandelbrot_set(points, num_proc).reshape((N, N)).T
 
     # Save set as image
-    # mandelbrot_set = mandelbrot_set.reshape((height, width))
+    # mandelbrot_set = mandelbrot_set.reshape((N, N))
     # plot_mandelbrot(mandelbrot_set)
