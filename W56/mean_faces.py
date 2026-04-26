@@ -16,12 +16,12 @@ def tonumpyarray(mp_arr):
     return np.frombuffer(mp_arr, dtype='float32')
 
 
-def reduce_step(args):
-    b, e, s, elemshape = args
+def reduce_step(args: tuple[int, int, int, tuple[int, ...]]):
+    start, end, steps, elemshape = args
     arr = tonumpyarray(shared_arr).reshape((-1,) + elemshape)
     # Change the code below to compute a step of the reduction
     # ---------------------------8<---------------------------
-    arr[b:e:2*s] += arr[b+s:e+s:2*s]
+    shared_arr[start:end:steps] += np.sum(arr[start:end:steps], axis=0)
 
 
 if __name__ == '__main__':
@@ -42,8 +42,9 @@ if __name__ == '__main__':
 
     # Change the code below to compute a step of the reduction
     # ---------------------------8<---------------------------
+    s = 1 # step
     pool.map(reduce_step,
-             [(i, i + chunk, 1, elemshape) for i in range(0, len(arr), chunk)],
+             [(i, i + s*chunk, s, elemshape) for i in range(0, len(arr), chunk)],
              chunksize=1)
 
     # Write output
