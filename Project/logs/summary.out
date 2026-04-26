@@ -1,0 +1,121 @@
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           46 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  32
+On-line CPU(s) list:                     0-31
+Vendor ID:                               GenuineIntel
+Model name:                              Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz
+CPU family:                              6
+Model:                                   85
+Thread(s) per core:                      1
+Core(s) per socket:                      16
+Socket(s):                               2
+Stepping:                                7
+BogoMIPS:                                5800.00
+Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm arat pln pts hwp_epp pku ospke avx512_vnni md_clear flush_l1d arch_capabilities ibpb_exit_to_user
+Virtualization:                          VT-x
+L1d cache:                               1 MiB (32 instances)
+L1i cache:                               1 MiB (32 instances)
+L2 cache:                                32 MiB (32 instances)
+L3 cache:                                44 MiB (2 instances)
+NUMA node(s):                            2
+NUMA node0 CPU(s):                       0-15
+NUMA node1 CPU(s):                       16-31
+Vulnerability Gather data sampling:      Mitigation; Microcode
+Vulnerability Indirect target selection: Mitigation; Aligned branch/return thunks
+Vulnerability Itlb multihit:             KVM: Mitigation: VMX disabled
+Vulnerability L1tf:                      Not affected
+Vulnerability Mds:                       Not affected
+Vulnerability Meltdown:                  Not affected
+Vulnerability Mmio stale data:           Mitigation; Clear CPU buffers; SMT disabled
+Vulnerability Reg file data sampling:    Not affected
+Vulnerability Retbleed:                  Mitigation; Enhanced IBRS
+Vulnerability Spec rstack overflow:      Not affected
+Vulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditional; PBRSB-eIBRS SW sequence; BHI SW loop, KVM SW loop
+Vulnerability Srbds:                     Not affected
+Vulnerability Tsa:                       Not affected
+Vulnerability Tsx async abort:           Mitigation; TSX disabled
+Vulnerability Vmscape:                   Mitigation; IBPB before exit to userspace
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 28297149: <summary> in cluster <dcc> Done
+
+Job <summary> was submitted from host <n-62-30-4> by user <s194591> in cluster <dcc> at Sun Apr 26 19:40:08 2026
+Job was executed on host(s) <n-62-11-63>, in queue <hpc>, as user <s194591> in cluster <dcc> at Sun Apr 26 19:40:09 2026
+</zhome/c2/2/146508> was used as the home directory.
+</zhome/c2/2/146508/PythonHPC/Project> was used as the working directory.
+Started at Sun Apr 26 19:40:09 2026
+Terminated at Sun Apr 26 19:40:09 2026
+Results reported at Sun Apr 26 19:40:09 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/sh 
+### General options 
+
+### -- specify queue -- 
+#BSUB -q hpc
+
+### -- set the job Name -- 
+#BSUB -J summary
+
+### -- ask for number of cores (default: 1) --
+#BSUB -n 1
+
+### -- specify that the cores must be on the same host -- 
+#BSUB -R "span[hosts=1]"
+
+### -- specify that we need X amount of memory per core/slot -- 
+#BSUB -R "rusage[mem=256MB]"
+
+#BSUB -R "select[model == XeonGold6226R]"
+
+### -- set walltime limit: hh:mm -- 
+#BSUB -W 00:30
+
+### -- set the email address -- (uncomment and set your email address if needed)
+##BSUB -u your_email_address
+
+### -- send notification at start -- (uncomment if needed)
+##BSUB -B 
+
+### -- send notification at completion -- (uncomment if needed)
+##BSUB -N 
+
+### -- Specify the output and error file. %J is the job-id -- 
+### -- -o and -e mean append, -oo and -eo mean overwrite -- 
+#BSUB -oo summary.out 
+#BSUB -eo summary.err 
+
+lscpu
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   0.50 sec.
+    Max Memory :                                 -
+    Average Memory :                             -
+    Total Requested Memory :                     256.00 MB
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              -
+    Max Threads :                                -
+    Run time :                                   0 sec.
+    Turnaround time :                            1 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <summary.err> for stderr output of this job.
+

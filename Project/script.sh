@@ -32,8 +32,8 @@
 
 ### -- Specify the output and error file. %J is the job-id -- 
 ### -- -o and -e mean append, -oo and -eo mean overwrite -- 
-#BSUB -oo simulate_20_floors.out 
-#BSUB -eo simulate_20_floors.err 
+#BSUB -oo logs/simulate_20_floors.out 
+#BSUB -eo logs/simulate_20_floors.err 
 
 source /dtu/projects/02613_2025/conda/conda_init.sh
 conda activate 02613_2026

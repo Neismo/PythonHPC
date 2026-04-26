@@ -5,7 +5,7 @@
 #BSUB -q hpc
 
 ### -- set the job Name -- 
-#BSUB -J simulate_20_floors_kernprof
+#BSUB -J summary
 
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 1
@@ -32,11 +32,7 @@
 
 ### -- Specify the output and error file. %J is the job-id -- 
 ### -- -o and -e mean append, -oo and -eo mean overwrite -- 
-#BSUB -oo logs/simulate_20_floors_kernprof.out 
-#BSUB -eo logs/simulate_20_floors_kernprof.err 
+#BSUB -oo logs/summary.out 
+#BSUB -eo logs/summary.err 
 
-source /dtu/projects/02613_2025/conda/conda_init.sh
-conda activate 02613_2026
-
-kernprof -l simulate.py 20
-python -m line_profiler -rmt "simulate.py.lprof"
+lscpu
