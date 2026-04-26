@@ -52,6 +52,9 @@ def process_floorplan(i, u0, interior_mask, max_iter, atol, bid):
 
 
 if __name__ == '__main__':
+
+    start_time = time()
+
     # Load data
     LOAD_DIR = '/dtu/projects/02613_2025/data/modified_swiss_dwellings/'
     with open(join(LOAD_DIR, 'building_ids.txt'), 'r') as f:
@@ -82,8 +85,6 @@ if __name__ == '__main__':
     MAX_ITER = 20_000
     ABS_TOL = 1e-4
 
-    start_total = time()
-
     all_u = np.empty_like(all_u0)
     tasks = [(i, all_u0[i], all_interior_mask[i], MAX_ITER, ABS_TOL, building_ids[i]) 
              for i in range(N)]
@@ -96,11 +97,11 @@ if __name__ == '__main__':
     for i, u in results:
         all_u[i] = u
 
-    print(f"Total time for {N} floor plans: {time() - start_total:.2f} seconds")
-
     # Print summary statistics in CSV format
     stat_keys = ['mean_temp', 'std_temp', 'pct_above_18', 'pct_below_15']
     print('building_id, ' + ', '.join(stat_keys))  # CSV header
     for bid, u, interior_mask in zip(building_ids, all_u, all_interior_mask):
         stats = summary_stats(u, interior_mask)
         print(f"{bid},", ", ".join(str(stats[k]) for k in stat_keys))
+
+    print(f"Total time for {N} floor plans: {time() - start_time:.2f} seconds")

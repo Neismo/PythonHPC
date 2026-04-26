@@ -5,16 +5,16 @@
 #BSUB -q hpc
 
 ### -- set the job Name -- 
-#BSUB -J simulate_20_floors_static
+#BSUB -J simulate_100_floors_static
 
 ### -- ask for number of cores (default: 1) --
-#BSUB -n 4
+#BSUB -n 16
 
 ### -- specify that the cores must be on the same host -- 
 #BSUB -R "span[hosts=1]"
 
 ### -- specify that we need X amount of memory per core/slot -- 
-#BSUB -R "rusage[mem=64MB]"
+#BSUB -R "rusage[mem=1GB]"
 
 #BSUB -R "select[model == XeonGold6226R]"
 
@@ -32,10 +32,23 @@
 
 ### -- Specify the output and error file. %J is the job-id -- 
 ### -- -o and -e mean append, -oo and -eo mean overwrite -- 
-#BSUB -oo simulate_20_floors_static.out 
-#BSUB -eo simulate_20_floors_static.err 
+#BSUB -oo simulate_100_floors_static.out 
+#BSUB -eo simulate_100_floors_static.err 
 
 source /dtu/projects/02613_2025/conda/conda_init.sh
 conda activate 02613_2026
 
-python -u simulate.py 20 4
+echo "Running on 1 core..."
+python -u simulate.py 100 1
+
+echo "Running on 2 cores..."
+python -u simulate.py 100 2
+
+echo "Running on 4 cores..."
+python -u simulate.py 100 4
+
+echo "Running on 8 cores..."
+python -u simulate.py 100 8
+
+echo "Running on 16 cores..."
+python -u simulate.py 100 16
