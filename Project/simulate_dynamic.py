@@ -71,7 +71,6 @@ if __name__ == '__main__':
 
     # STATIC SCHEDULING
     chunk_size = 1  # force dynamic scheduling
-    print(f"Using {NUM_PROCS} processes with chunk size {chunk_size} for static scheduling.", flush=True)
 
     # Load floor plans
     all_u0 = np.empty((N, 514, 514))
