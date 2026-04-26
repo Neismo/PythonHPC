@@ -8,7 +8,7 @@
 #BSUB -J simulate_100_floors_dynamic
 
 ### -- ask for number of cores (default: 1) --
-#BSUB -n 16
+#BSUB -n 32
 
 ### -- specify that the cores must be on the same host -- 
 #BSUB -R "span[hosts=1]"
@@ -50,5 +50,8 @@ conda activate 02613_2026
 # echo "Running on 8 cores..."
 # python -u simulate_dynamic.py 100 8
 
-echo "Running on 16 cores..."
-python -u simulate_dynamic.py 100 16
+#echo "Running on 16 cores..."
+#python -u simulate_dynamic.py 100 16
+
+echo "Running on 32 cores..."
+python -u simulate_dynamic.py 100 32
