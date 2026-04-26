@@ -5,7 +5,7 @@
 #BSUB -q hpc
 
 ### -- set the job Name -- 
-#BSUB -J simulate_100_floors_static
+#BSUB -J simulate_100_floors_dynamic
 
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 16
@@ -32,23 +32,23 @@
 
 ### -- Specify the output and error file. %J is the job-id -- 
 ### -- -o and -e mean append, -oo and -eo mean overwrite -- 
-#BSUB -oo simulate_100_floors_static.out 
-#BSUB -eo simulate_100_floors_static.err 
+#BSUB -oo simulate_100_floors_dynamic.out 
+#BSUB -eo simulate_100_floors_dynamic.err 
 
 source /dtu/projects/02613_2025/conda/conda_init.sh
 conda activate 02613_2026
 
 echo "Running on 1 core..."
-python -u simulate_static.py 100 1
+python -u simulate_dynamic.py 100 1
 
 echo "Running on 2 cores..."
-python -u simulate_static.py 100 2
+python -u simulate_dynamic.py 100 2
 
 echo "Running on 4 cores..."
-python -u simulate_static.py 100 4
+python -u simulate_dynamic.py 100 4
 
 echo "Running on 8 cores..."
-python -u simulate_static.py 100 8
+python -u simulate_dynamic.py 100 8
 
 echo "Running on 16 cores..."
-python -u simulate_static.py 100 16
+python -u simulate_dynamic.py 100 16
