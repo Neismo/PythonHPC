@@ -1,0 +1,153 @@
+No GPU on this node, CUDA module not loaded
+Finished 10000 in 11.20 seconds
+Finished 10009 in 18.88 seconds
+Finished 10014 in 28.51 seconds
+Finished 10019 in 27.12 seconds
+Finished 10029 in 9.40 seconds
+Finished 10031 in 15.79 seconds
+Finished 10051 in 5.13 seconds
+Finished 10053 in 13.20 seconds
+Finished 10056 in 5.65 seconds
+Finished 10064 in 23.51 seconds
+Finished 10075 in 30.43 seconds
+Finished 10079 in 29.82 seconds
+Finished 10080 in 29.43 seconds
+Finished 10082 in 31.40 seconds
+Finished 10083 in 13.14 seconds
+Finished 10084 in 13.52 seconds
+Finished 10085 in 14.65 seconds
+Finished 10086 in 30.21 seconds
+Finished 10087 in 28.50 seconds
+Finished 10089 in 30.17 seconds
+building_id, mean_temp, std_temp, pct_above_18, pct_below_15
+10000, 14.01233878811275, 6.367431059312565, 30.941014791508444, 55.542295034537624
+10009, 11.000135812436373, 5.811144379826625, 16.6712734948236, 74.9723590310584
+10014, 14.744169941950119, 7.037733284673848, 38.26367541377415, 52.80837116508215
+10019, 14.735524480624482, 7.030325006703675, 38.14915412864569, 52.92926826787113
+10029, 10.616037322820358, 6.317331938274926, 18.25563221896085, 74.51301795448481
+10031, 12.507072852890545, 6.278432089100354, 24.044722033998173, 66.39513301711693
+10051, 13.289039951277402, 5.999085063388632, 25.97693550756574, 62.859923608050536
+10053, 11.366493551285709, 6.26121798185875, 19.9510754583921, 72.41052538787024
+10056, 14.220114507861702, 6.179461157398302, 31.763454814173965, 57.06174975667784
+10064, 12.71696893739585, 6.964227784263683, 28.79137124461432, 62.75688345539249
+10075, 15.156939199079357, 6.44052034037085, 39.12088154756647, 47.45605511880576
+10079, 15.094353507626135, 7.313911268349323, 41.90001451870493, 49.44974108309539
+10080, 15.777740694240359, 7.280585752157965, 46.365765006711015, 44.711034476002
+10082, 16.465720758630678, 6.713345052234242, 48.64349722630506, 40.56137689061685
+10083, 15.639247995421403, 7.120808056609733, 44.855518923515284, 45.886354482120744
+10084, 15.100584697661853, 7.1505418077486445, 40.90648998644782, 50.266526125583496
+10085, 15.868862158668058, 7.192791728448739, 46.18303917834116, 44.72566696293788
+10086, 14.391525374209257, 7.21561607319371, 37.25664572257129, 53.01884968583857
+10087, 15.073205905031166, 7.275519953981684, 41.532405798190645, 49.89713190601896
+10089, 13.989763514400206, 7.276278123379982, 35.45861191757374, 56.3640146392669
+Wrote profile results to 'simulate.py.lprof'
+Inspect results with:
+python -m line_profiler -rmt simulate.py.lprof
+Timer unit: 1e-06 s
+
+Total time: 409.098 s
+File: simulate.py
+Function: jacobi at line 15
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    15                                           @profile
+    16                                           def jacobi(u, interior_mask, max_iter, atol=1e-6):
+    17        20      15703.6    785.2      0.0      u = np.copy(u)
+    18                                           
+    19    118118     167145.1      1.4      0.0      for i in range(max_iter):
+    20                                                   # Compute average of left, right, up and down neighbors, see eq. (1)
+    21    118118  245335970.8   2077.0     60.0          u_new = 0.25 * (u[1:-1, :-2] + u[1:-1, 2:] + u[:-2, 1:-1] + u[2:, 1:-1])
+    22    118118   36661665.1    310.4      9.0          u_new_interior = u_new[interior_mask]
+    23    118118   87487625.4    740.7     21.4          delta = np.abs(u[1:-1, 1:-1][interior_mask] - u_new_interior).max()
+    24    118118   39088851.8    330.9      9.6          u[1:-1, 1:-1][interior_mask] = u_new_interior
+    25                                           
+    26    118118     340519.2      2.9      0.1          if delta < atol:
+    27        20         32.7      1.6      0.0              break
+    28        20         63.4      3.2      0.0      return u
+
+409.10 seconds - simulate.py:15 - jacobi
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 28293997: <simulate_20_floors_kernprof> in cluster <dcc> Done
+
+Job <simulate_20_floors_kernprof> was submitted from host <n-62-30-4> by user <s194591> in cluster <dcc> at Sun Apr 26 16:51:25 2026
+Job was executed on host(s) <n-62-11-63>, in queue <hpc>, as user <s194591> in cluster <dcc> at Sun Apr 26 16:51:26 2026
+</zhome/c2/2/146508> was used as the home directory.
+</zhome/c2/2/146508/PythonHPC/Project> was used as the working directory.
+Started at Sun Apr 26 16:51:26 2026
+Terminated at Sun Apr 26 16:58:19 2026
+Results reported at Sun Apr 26 16:58:19 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/sh 
+### General options 
+
+### -- specify queue -- 
+#BSUB -q hpc
+
+### -- set the job Name -- 
+#BSUB -J simulate_20_floors_kernprof
+
+### -- ask for number of cores (default: 1) --
+#BSUB -n 1
+
+### -- specify that the cores must be on the same host -- 
+#BSUB -R "span[hosts=1]"
+
+### -- specify that we need X amount of memory per core/slot -- 
+#BSUB -R "rusage[mem=256MB]"
+
+#BSUB -R "select[model == XeonGold6226R]"
+
+### -- set walltime limit: hh:mm -- 
+#BSUB -W 00:30
+
+### -- set the email address -- (uncomment and set your email address if needed)
+##BSUB -u your_email_address
+
+### -- send notification at start -- (uncomment if needed)
+##BSUB -B 
+
+### -- send notification at completion -- (uncomment if needed)
+##BSUB -N 
+
+### -- Specify the output and error file. %J is the job-id -- 
+### -- -o and -e mean append, -oo and -eo mean overwrite -- 
+#BSUB -oo simulate_20_floors_kernprof.out 
+#BSUB -eo simulate_20_floors_kernprof.err 
+
+source /dtu/projects/02613_2025/conda/conda_init.sh
+conda activate 02613_2026
+
+kernprof -l simulate.py 20
+python -m line_profiler -rmt "simulate.py.lprof"
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   411.35 sec.
+    Max Memory :                                 122 MB
+    Average Memory :                             109.20 MB
+    Total Requested Memory :                     256.00 MB
+    Delta Memory :                               134.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   412 sec.
+    Turnaround time :                            414 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <simulate_20_floors_kernprof.err> for stderr output of this job.
+
