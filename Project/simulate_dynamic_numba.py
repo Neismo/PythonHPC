@@ -1,9 +1,8 @@
 import multiprocessing
 from os.path import join
 import sys
-
+from numba import jit
 from time import perf_counter as time
-from line_profiler import profile
 
 import numpy as np
 
@@ -14,20 +13,37 @@ def load_data(load_dir, bid):
     interior_mask = np.load(join(load_dir, f"{bid}_interior.npy"))
     return u, interior_mask
 
-@profile
-def jacobi(u, interior_mask, max_iter, atol=1e-6):
-    u = np.copy(u)
+@jit(nopython=True, cache=True)
+def jacobi_numba(u, interior_mask, max_iter, atol):
+    old = u.copy()
+    new = u.copy()
 
-    for i in range(max_iter):
-        # Compute average of left, right, up and down neighbors, see eq. (1)
-        u_new = 0.25 * (u[1:-1, :-2] + u[1:-1, 2:] + u[:-2, 1:-1] + u[2:, 1:-1])
-        u_new_interior = u_new[interior_mask]
-        delta = np.abs(u[1:-1, 1:-1][interior_mask] - u_new_interior).max()
-        u[1:-1, 1:-1][interior_mask] = u_new_interior
+    rows, cols = old.shape
+
+    for _ in range(max_iter):
+        delta = 0.0
+
+        for i in range(1, rows - 1):
+            for j in range(1, cols - 1):
+                if interior_mask[i - 1, j - 1]:
+                    val = 0.25 * (
+                        old[i, j - 1] +
+                        old[i, j + 1] +
+                        old[i - 1, j] +
+                        old[i + 1, j]
+                    )
+
+                    diff = abs(old[i, j] - val)
+                    if diff > delta:
+                        delta = diff
+
+                    new[i, j] = val
+
+        old, new = new, old
 
         if delta < atol:
             break
-    return u
+    return old
 
 
 def summary_stats(u, interior_mask):
@@ -46,12 +62,18 @@ def summary_stats(u, interior_mask):
 # Top-level helper function for multiprocessing
 def process_floorplan(i, u0, interior_mask, max_iter, atol, bid):
     start_t = time()
-    u = jacobi(u0, interior_mask, max_iter, atol)
+    u = jacobi_numba(u0, interior_mask, max_iter, atol)
     print(f"Finished {bid} in {time() - start_t:.2f} seconds", flush=True)
     return i, u
 
 
 if __name__ == '__main__':
+
+    # Run jacobi iterations for each floor plan
+    MAX_ITER = 20_000
+    ABS_TOL = 1e-4
+
+    jacobi_numba(np.zeros((514, 514)), np.ones((512, 512), dtype='bool'), MAX_ITER, ABS_TOL)  # warm-up numba
 
     start_time = time()
 
@@ -79,10 +101,6 @@ if __name__ == '__main__':
         u0, interior_mask = load_data(LOAD_DIR, bid)
         all_u0[i] = u0
         all_interior_mask[i] = interior_mask
-
-    # Run jacobi iterations for each floor plan
-    MAX_ITER = 20_000
-    ABS_TOL = 1e-4
 
     all_u = np.empty_like(all_u0)
     tasks = [(i, all_u0[i], all_interior_mask[i], MAX_ITER, ABS_TOL, building_ids[i]) 
