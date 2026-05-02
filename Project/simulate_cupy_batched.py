@@ -11,22 +11,24 @@ def load_data(load_dir, bid):
     interior_mask = cp.load(join(load_dir, f"{bid}_interior.npy"))
     return u, interior_mask
 
-def jacobi(u, interior_mask, max_iter, atol=1e-6, check_interval=100):
-    u = cp.copy(u)
+def jacobi_batched(u_batch, interior_mask_batch, max_iter, atol=1e-4, check_interval=100):
+    u = cp.copy(u_batch)
 
     for i in range(max_iter):
-        # Compute average of left, right, up and down neighbors, see eq. (1)
-        u_new = 0.25 * (u[1:-1, :-2] + u[1:-1, 2:] + u[:-2, 1:-1] + u[2:, 1:-1])
-
-        u_updated = cp.where(interior_mask, u_new, u[1:-1, 1:-1])
+        u_new = 0.25 * (u[:, 1:-1, :-2] + 
+                        u[:, 1:-1, 2:] + 
+                        u[:, :-2, 1:-1] + 
+                        u[:, 2:, 1:-1])
+    
+        u_updated = cp.where(interior_mask_batch, u_new, u[:, 1:-1, 1:-1])
         
-        if i % check_interval == 0:
-            delta = cp.abs(u[1:-1, 1:-1] - u_updated).max()
+        if i % check_interval == 0:  # continue until "worst" floor converged
+            delta = cp.abs(u[:, 1:-1, 1:-1] - u_updated).max()
             if delta < atol:
-                u[1:-1, 1:-1] = u_updated
+                u[:, 1:-1, 1:-1] = u_updated
                 break
 
-        u[1:-1, 1:-1] = u_updated
+        u[:, 1:-1, 1:-1] = u_updated
 
     return u
 
@@ -70,14 +72,8 @@ if __name__ == '__main__':
     ABS_TOL = 1e-4
 
     start_total = time()
-
-    all_u = cp.empty_like(all_u0)
-    for i, (u0, interior_mask) in enumerate(zip(all_u0, all_interior_mask)):
-        start_t = time()
-        u = jacobi(u0, interior_mask, MAX_ITER, ABS_TOL)
-        all_u[i] = u
-        print(f"Finished {building_ids[i]} in {time() - start_t:.2f} seconds")
-
+    # print(f"Running Jacobi iterations for {N} floor plans...")
+    all_u = jacobi_batched(all_u0, all_interior_mask, MAX_ITER, ABS_TOL)
     print(f"Total time for {N} floor plans: {time() - start_total:.2f} seconds")
 
     # Print summary statistics in CSV format
