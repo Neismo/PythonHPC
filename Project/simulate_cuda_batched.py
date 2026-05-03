@@ -5,10 +5,11 @@ from time import perf_counter as time
 import numpy as np
 from numba import cuda
 
+DTYPE = np.float32
 
 def load_data(load_dir, bid):
     SIZE = 512
-    u = np.zeros((SIZE + 2, SIZE + 2), dtype=np.float64)
+    u = np.zeros((SIZE + 2, SIZE + 2), dtype=DTYPE)
     u[1:-1, 1:-1] = np.load(join(load_dir, f"{bid}_domain.npy"))
     interior_mask = np.load(join(load_dir, f"{bid}_interior.npy"))
     return u, interior_mask
@@ -27,7 +28,7 @@ def jacobi_kernel_batched(old, new, interior_mask):
         j = col + 1
 
         if interior_mask[b, row, col]:
-            val = 0.25 * (
+            val = DTYPE(0.25) * (
                 old[b, i, j - 1] +
                 old[b, i, j + 1] +
                 old[b, i - 1, j] +
@@ -39,7 +40,7 @@ def jacobi_kernel_batched(old, new, interior_mask):
 
 
 def jacobi_cuda_batched(all_u, all_interior_mask, max_iter):
-    all_u = np.ascontiguousarray(all_u, dtype=np.float64)
+    all_u = np.ascontiguousarray(all_u, dtype=DTYPE)
     all_interior_mask = np.ascontiguousarray(all_interior_mask, dtype=np.bool_)
 
     old_device = cuda.to_device(all_u)
@@ -100,11 +101,11 @@ if __name__ == "__main__":
     building_ids = building_ids[:N]
 
     # Compile the batched kernel before timing the actual floorplans.
-    warm_u = np.zeros((1, 514, 514), dtype=np.float64)
+    warm_u = np.zeros((1, 514, 514), dtype=DTYPE)
     warm_mask = np.ones((1, 512, 512), dtype=np.bool_)
     jacobi_cuda_batched(warm_u, warm_mask, 1)
 
-    all_u0 = np.empty((N, 514, 514), dtype=np.float64)
+    all_u0 = np.empty((N, 514, 514), dtype=DTYPE)
     all_interior_mask = np.empty((N, 512, 512), dtype=np.bool_)
 
     for i, bid in enumerate(building_ids):
