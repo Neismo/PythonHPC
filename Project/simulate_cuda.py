@@ -17,19 +17,22 @@ def load_data(load_dir, bid):
 @cuda.jit
 def jacobi_kernel(old, new, interior_mask):
     cols, rows = old.shape
-    i, j = cuda.grid(2)
+    col, row = cuda.grid(2)
 
-    if i >= 1 and i < rows - 1 and j >= 1 and j < cols - 1:
-        if interior_mask[i - 1, j - 1]:
-            new[i, j] = 0.25 * (
-                old[i, j - 1]
-                + old[i, j + 1]
-                + old[i - 1, j]
-                + old[i + 1, j]
+    if row < rows - 2 and col < cols - 2:
+        i, j = row + 1, col + 1
+
+        if interior_mask[row, col]:
+            val = 0.25 * (
+                old[i, j - 1] + 
+                old[i, j + 1] +
+                old[i - 1, j] + 
+                old[i + 1, j]
             )
+            diff = abs(val - old[i, j])
+            new[i, j] = val
         else:
             new[i, j] = old[i, j]
-
 
 def jacobi_cuda(u, interior_mask, max_iter):
     old_device = cuda.to_device(u)

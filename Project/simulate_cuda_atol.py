@@ -32,14 +32,14 @@ def jacobi_step_kernel(old, new, mask, block_max):
     # shared mem for storing diffs, 1 slot per thread (16x16)
     smem = cuda.shared.array(256, dtype=DTYPE)
     
-    diff = DTYPE(0.0)
+    diff = 0.0
     
     # if row and col from cuda grid is within u we do the ops
     if row < rows - 2 and col < cols - 2:
         i, j = row + 1, col + 1
 
         if mask[row, col]:
-            val = DTYPE(0.25) * (
+            val = 0.25 * (
                 old[i, j - 1] + 
                 old[i, j + 1] +
                 old[i - 1, j] + 
